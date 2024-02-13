@@ -1,0 +1,85 @@
+{
+  "items": [
+    {
+      "name": "Turing - U.S. Software Jobs",
+      "title": "[Action...] Saleh, update your availability before it expires...",
+      "subtitle": "Hi Saleh, We hope you are doing well. We wanted to check in and s...",
+      "color": "#4c4f56",
+      "id": "T",
+      "date": "2024-02-08",
+      "time": "09:00 AM"
+    },
+    {
+      "name": "IFIC BANK",
+      "title": "IFIC Bank Transaction Alert",
+      "subtitle": "Thank you for banking with IFIC Bank PLC....",
+      "color": "#d3212d",
+      "id": "I",
+      "date": "2024-02-08",
+      "time": "11:30 AM"
+    },
+    {
+      "name": "TechGig Webinar",
+      "title": "Dive into the Future: Blockchain's Disruption of Trade Finance",
+      "subtitle": "How is Blockchain disrupting Trade Finance? Save my spot Friday,...",
+      "color": "#f442dc",
+      "id": "T",
+      "date": "2024-02-09",
+      "time": "02:00 PM"
+    },
+    {
+      "name": "LinkedIn Connection Request",
+      "title": "You have a new connection request from John Doe.",
+      "subtitle": "John Doe is interested in connecting with you on LinkedIn. View request Accept",
+      "color": "#0084ff",
+      "id": "L",
+      "date": "2024-02-13",
+      "time": "04:45 PM"
+    },
+    {
+      "name": "Weather Alert",
+      "title": "Weather Alert: Thunderstorm warning issued for your area.",
+      "subtitle": "Stay indoors and stay safe.",
+      "color": "#ff8c00",
+      "id": "W",
+      "date": "2024-02-14",
+      "time": "08:15 AM"
+    },
+    {
+      "name": "GitHub Notifications",
+      "title": "You have 5 new notifications on GitHub.",
+      "subtitle": "Check them out now.",
+      "color": "#6e5494",
+      "id": "G",
+      "date": "2024-02-11",
+      "time": "10:20 AM"
+    },
+    {
+      "name": "New YouTube Video",
+      "title": "New video uploaded on YouTube: Introduction to Flutter Development",
+      "subtitle": "Watch now!",
+      "color": "#ff0000",
+      "id": "Y",
+      "date": "2024-02-11",
+      "time": "01:30 PM"
+    },
+    {
+      "name": "Facebook Friend Request",
+      "title": "You have a new friend request from Jane Smith.",
+      "subtitle": "View request Confirm",
+      "color": "#3b5998",
+      "id": "F",
+      "date": "2024-02-12",
+      "time": "03:10 PM"
+    },
+    {
+      "name": "Twitter Notification",
+      "title": "You have a new notification on Twitter.",
+      "subtitle": "Check it out.",
+      "color": "#1da1f2",
+      "id": "T",
+      "date": "2024-02-12",
+      "time": "05:45 AM"
+    }
+  ]
+}
