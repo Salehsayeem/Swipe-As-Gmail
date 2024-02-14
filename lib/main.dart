@@ -10,7 +10,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key});
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   bool isToday(String dateString) {
-    if (dateString == null || dateString.isEmpty) return false;
+    if (dateString.isEmpty) return false;
 
     final now = DateTime.now();
     final date = DateTime.parse(dateString);
@@ -75,11 +75,89 @@ class _MyHomePageState extends State<MyHomePage> {
         now.day == date.day;
   }
 
+  void sortItemsByDateAndTime(List<dynamic> filteredItems) {
+    filteredItems.sort((a, b) {
+      DateTime dateTimeA = DateTime.tryParse(a["date"] ?? "") ?? DateTime(0);
+      DateTime dateTimeB = DateTime.tryParse(b["date"] ?? "") ?? DateTime(0);
+      return dateTimeB.compareTo(dateTimeA);
+    });
+  }
+
+  Widget buildDismissibleItem(Map<String, dynamic> item, int index) {
+    final colorCode = item["color"];
+
+    return Dismissible(
+      key: Key(item["id"].toString()),
+      direction: DismissDirection.horizontal,
+      background: Container(
+        color: colorCode != null
+            ? Color(int.parse(colorCode.substring(1), radix: 16) | 0xFF000000)
+            : Colors.red,
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.only(left: 16),
+      ),
+      onDismissed: (direction) {
+        setState(() {
+          _items.remove(item);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(item["name"] + " removed"),
+            shape: const StadiumBorder(),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.teal,
+            action: SnackBarAction(
+              label: 'Undo',
+              onPressed: () {
+                setState(() {
+                  _items.insert(index, item);
+                });
+              },
+            ),
+          ),
+        );
+      },
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+        leading: CircleAvatar(
+          backgroundColor: colorCode != null
+              ? Color(int.parse(colorCode.substring(1), radix: 16) | 0xFF000000)
+              : Colors.transparent,
+          child: Text(item["id"]),
+        ),
+        title: Text(
+          item["name"],
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              _truncateText(item["title"]),
+              style: const TextStyle(color: Colors.black, fontSize: 12),
+            ),
+            Text(
+              _truncateText(item["subtitle"]),
+              style: const TextStyle(color: Colors.black, fontSize: 12),
+            ),
+          ],
+        ),
+        trailing: Text(
+          (item["date"] != null && item["time"] != null)
+              ? (isToday(item["date"]) ? item["time"] : item["date"])
+              : "",
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //Apply design and animations in Appbar
       appBar: AppBar(
         centerTitle: true,
+        //the menu icon
         leading: HoverAnimatedContainer(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -95,6 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {},
           ),
         ),
+        //input text
         title: GestureDetector(
           onTap: () {},
           child: TextField(
@@ -117,6 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         actions: [
           Padding(
+            //gmail avatar
             padding: const EdgeInsets.all(8.0),
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
@@ -154,6 +234,7 @@ class _MyHomePageState extends State<MyHomePage> {
           _items.isNotEmpty
               ? Expanded(
                   child: ListView.builder(
+                    //search functionalities
                     itemCount: _items
                         .where((item) => item["name"].toLowerCase().contains(
                               _searchText.toLowerCase(),
@@ -166,95 +247,14 @@ class _MyHomePageState extends State<MyHomePage> {
                               ))
                           .toList();
 
-                      filteredItems.sort((a, b) {
-                        DateTime dateTimeA =
-                            DateTime.tryParse(a["date"] ?? "") ?? DateTime(0);
-                        DateTime dateTimeB =
-                            DateTime.tryParse(b["date"] ?? "") ?? DateTime(0);
-                        return dateTimeB.compareTo(dateTimeA);
-                      });
-
-                      final colorCode = filteredItems[index]["color"];
+                      sortItemsByDateAndTime(filteredItems);
                       final item = filteredItems[index];
-
-                      return Dismissible(
-                        key: Key(item["id"].toString()),
-                        direction: DismissDirection.horizontal,
-                        background: Container(
-                          color: colorCode != null
-                              ? Color(
-                                  int.parse(colorCode.substring(1), radix: 16) |
-                                      0xFF000000)
-                              : Colors.red,
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.only(left: 16),
-                        ),
-                        onDismissed: (direction) {
-                          setState(() {
-                            _items.remove(item);
-                          });
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(item["name"] + " removed"),
-                              shape: const StadiumBorder(),
-                              behavior: SnackBarBehavior.floating,
-                              backgroundColor: Colors.teal,
-                              action: SnackBarAction(
-                                label: 'Undo',
-                                onPressed: () {
-                                  setState(() {
-                                    _items.insert(index, item);
-                                  });
-                                },
-                              ),
-                            ),
-                          );
-                        },
-                        child: ListTile(
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 16.0),
-                          leading: CircleAvatar(
-                            backgroundColor: colorCode != null
-                                ? Color(int.parse(colorCode.substring(1),
-                                        radix: 16) |
-                                    0xFF000000)
-                                : Colors.transparent,
-                            child: Text(
-                              item["id"],
-                            ),
-                          ),
-                          title: Text(
-                            item["name"],
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 15),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _truncateText(item["title"]),
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 12),
-                              ),
-                              Text(
-                                _truncateText(item["subtitle"]),
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 12),
-                              ),
-                            ],
-                          ),
-                          trailing: Text(
-                            (item["date"] != null && item["time"] != null)
-                                ? (isToday(item["date"])
-                                    ? item["time"]
-                                    : item["date"])
-                                : "",
-                          ),
-                        ),
-                      );
+                      // Return this widget to view the list and apply dismissible function
+                      return buildDismissibleItem(item, index);
                     },
                   ),
                 )
+              //if there is no item, then show this text
               : Container(
                   margin: const EdgeInsets.only(top: 20),
                   child: const Center(
